@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sous le capot :: Python objet</title>
+    <meta name="generator" content="Antora 3.1.12">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+<link rel="stylesheet" href="../../../_/css/extra.css">
+<link rel="stylesheet" href="../../../_/css/lastmodify.css">
+
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../../..">Python objet</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="python_objet" data-version="2025">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Python objet</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../poo/poo.html">Concepts de la POO</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../objet/objet.html">Objet</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../operateurs/operateurs.html">Opérateurs</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../classe/classe.html">Classe</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../heritage/heritage.html">Héritage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../exception/exception.html">Exceptions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Applications</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_iter/iter.html">Itérable</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_files/files.html">Lecture/écriture de données</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_contextman/context.html">Context manager</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_serialisation/serialisation.html">Sérialisation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_callable/callable.html">Callables</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Python objet</span>
+    <span class="version">2025</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Python objet</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="../index.html">2025</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Python objet</a></li>
+    <li><a href="misc.html">Sous le capot</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///home/jaclin/antora_components/python_objet/starts/github/modules/internals/pages/misc.adoc">Edit this Page</a></div>
+</div>
+<div class="lastmodify"> modifié le <span id="lastmodify"/> </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Sous le capot</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="imageblock right">
+<div class="content">
+<img src="_images/capot.jpg" alt="capot" width="180">
+</div>
+</div>
+<div class="paragraph">
+<p>Que se passe-t-il dans les entrailles de l&#8217;interpréteur Python ?
+Il est parfois nécessaire de le savoir,
+pour comprendre la logique de certains comportements qui sinon paraissent bizarres.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mutabilité"><a class="anchor" href="#_mutabilité"></a>1. Mutabilité</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_observation"><a class="anchor" href="#_observation"></a>1.1. Observation</h3>
+<div class="listingblock">
+<div class="title">exemple 1</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = "uv"
+b = a
+print(a,b)    # uv uv
+a += "w"
+print(a,b)    # uvw uv</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">exemple 2</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = [1,2]
+b = a
+print(a,b)    # [1, 2] [1, 2]
+a += [3]
+print(a,b)    # [1, 2, 3] [1, 2, 3]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dans ce dernier exemple, la modification de <code>a</code> impacte <code>b</code>,
+ce qui n&#8217;est pas le cas dans le premier.
+Conclusion : 2 comportements différents pour ces 2 types string et liste.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_visualisation"><a class="anchor" href="#_visualisation"></a>1.2. Visualisation</h3>
+<div class="listingblock">
+<div class="title">exemple 1</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = "uv"
+b = a
+print(id(a),id(b),a is b)    # 140245667117360 140245667117360 True</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/str1.png" alt="str1">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a += "w"             <i class="conum" data-value="1"></i><b>(1)</b>
+print(id(a),id(b),a is b)    # 140245667117392 140245667117360 False</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>l&#8217;instruction <code>a+="w"</code> ne modifie pas la donnée <code>uv</code>,
+mais en crée un nouveau <code>uvw</code>, et fait pointer la variable <code>a</code> vers cette nouvelle donnée :
+une chaîne de caractères est donc immuable (<em>immutable</em>).</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/str2.png" alt="str2">
+</div>
+</div>
+<div class="listingblock">
+<div class="title">exemple 2</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = [1,2]
+b = a
+print(id(a),id(b),a is b)    # 140245663171968 140245663171968 True</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/list1.png" alt="list1">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a += [3]           <i class="conum" data-value="1"></i><b>(1)</b>
+print(id(a),id(b),a is b)    # 140245663171968 140245663171968 True</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>l&#8217;instruction <code>a+=[3]</code> modifie la liste <code>[1,2]</code> : une liste est donc muable (<em>mutable</em>).</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/list2.png" alt="list2">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_récapitulatif"><a class="anchor" href="#_récapitulatif"></a>1.3. Récapitulatif</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Les objets dont la valeur peut changer sont muables,
+ceux dont la valeur est définitivement fixée à leur création sont immuables.</p>
+</div>
+<div class="paragraph">
+<p>La valeur d&#8217;un objet conteneur immuable qui contient une référence vers un objet muable peut varier lorsque la valeur de l&#8217;objet muable change.
+Le conteneur est quand même considéré comme immuable parce que l&#8217;ensemble des objets qu&#8217;il contient ne peut pas être modifié.
+Ainsi, l&#8217;immuabilité n&#8217;est pas strictement équivalente au fait d&#8217;avoir une valeur non modifiable, c&#8217;est plus subtil.</p>
+</div>
+<div class="paragraph">
+<p>La muabilité d&#8217;un objet ne dépend que de son type.
+Par exemple, les nombres, les chaînes de caractères et les n-uplets sont immuables alors que les dictionnaires, les listes et les instances de classe sont muables
+(extrait de la <a href="https://docs.python.org/fr/3/reference/datamodel.html#customizing-class-creation">doc python</a>).</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_quel_impact"><a class="anchor" href="#_quel_impact"></a>1.4. Quel impact ?</h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Méfiance lorsque 2 variables pointent vers la même donnée</dt>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = "uv"
+b = a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Les strings étant immuables, <code>a</code> et <code>b</code> auront ici leur propre ligne de vie.
+Ici <code>a is b</code>, mais après une modification de <code>a</code> ou de <code>b</code>, <code>a is b</code> sera <code>False.</code>
+Par contre, les listes étant muables :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = [1,2]
+b = a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>alors <code>a</code> et <code>b</code> auront ici la même ligne de vie :
+<code>a is b</code>, et le restera après toute modification de <code>a</code> ou <code>b</code>.
+La fonction <code>copy</code> du module <code>copy</code> permet de défaire cette liaison :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from copy import copy
+
+a = [1,2]
+b = copy(a)
+print(a is b)    # False
+print(a,b)       # [1, 2] [1, 2]
+b += [3]
+print(a,b)       # [1, 2, 3] [1, 2]</code></pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Attention aux arguments de fonction, au retour de l&#8217;appel</dt>
+</dl>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def f(x,y):
+  x += y
+  print(f"{x=}") ;
+
+a = "uv"
+f(a,"w")             # x='uvw'
+print(f"{a=}")       # a='uv'
+
+b = [1,2]
+f(b,[3])             # x=[1, 2, 3]
+print(f"{b=}")       # b=[1, 2, 3]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On constate ici que l&#8217;argument <code>a</code> de type <code>str</code> est intact après exécution de <code>f()</code>,
+alors que l&#8217;argument <code>b</code> de type <code>list</code> a été modifié.
+Pour être sûr qu&#8217;une fonction ne va pas modifier un argument muable,
+mieux vaut envoyer une copie :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def f(x,y):
+  x += y
+
+a = [1,2]
+f(copy(a),[3])
+print(a)       # [1,2]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tableau_associatif"><a class="anchor" href="#_tableau_associatif"></a>2. Tableau associatif</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Un tableau associatif, ou <em>table de hashage</em>,
+est une structure de données de haut niveau,
+n&#8217;existant pas forcément dans tous les langages de programmation, notamment les plus anciens (comme C).
+Elle est appelée
+<em>dictionnaire</em> en Python,
+<em>hash</em> en Perl,
+<em>map</em> en C++.</p>
+</div>
+<div class="paragraph">
+<p>Un tableau associatif est un conteneur de paires <code>(clé,valeur)</code>.
+Les clés sont uniques.
+Une valeur peut être recupérée directement à partir de la clé associée,
+sans itérer : par un accès direct (<em>random access</em>).</p>
+</div>
+<div class="sect2">
+<h3 id="_complexité_algorithmique"><a class="anchor" href="#_complexité_algorithmique"></a>2.1. Complexité algorithmique</h3>
+<div class="paragraph">
+<p>La complexité temporelle d’un algorithme est le nombre d’opérations qu&#8217;il est nécessaire d&#8217;exécuter pour résoudre le problème.
+Ce nombre dépend généralement des données du problème (les paramètres de l’algorithme).
+Ce qui est surtout intéressant, c&#8217;est de connaitre la variation de cette complexité en fonction de la taille n des données (pour n grand, de façon à ce que cela soit représentatif) :</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/complexite.png" alt="complexite">
+</div>
+</div>
+<div class="paragraph">
+<p>Un algorithme qui effectue 2 fois plus d&#8217;opérations lorsqu&#8217;on double la taille des données,
+3 fois plus quand on les triple, etc.
+ est de complexité linéaire, notée O(n), où n représente la taillle des données.
+Un algorithme qui effectue 4 fois plus d&#8217;opérations lorsqu&#8217;on double la taille des données,
+9 fois plus quand on les triple, etc.
+est de complexité O(n²).</p>
+</div>
+<div class="paragraph">
+<p>Cette complexité temporelle donne un ordre de grandeur de la variation du temps de calcul en fonction de la taille des données, nécessaire à la résolution du problème.
+De la même façon, la complexité spaciale d&#8217;un algorithme évalue la mémoire nécessaire à la résolution du problème.
+Ces 2 notions permettent  de comparer l&#8217;efficacité de 2 algorithmes.
+Elles permettent de répondre à des questions telles que :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>mon programme a mis 2ms à calculer 10!, combien va-t-il mettre pour 100! ?</p>
+</li>
+<li>
+<p>je viens de modifier un élément dans ma liste triée, quel algorithme choisir pour la re-trier ?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_recherche_séquentielle_et_dichotomique"><a class="anchor" href="#_recherche_séquentielle_et_dichotomique"></a>2.2. Recherche séquentielle et dichotomique</h3>
+<div class="paragraph">
+<p>La recherche séquentielle (<em>linear search</em>) d&#8217;un élément dans une liste consiste
+à parcourir séquentiellement les éléments de la liste dans l&#8217;ordre naturel,
+de comparer la valeur de l&#8217;élément courant à l&#8217;élément recherché, et de s&#8217;arrêter soit parce que l&#8217;élément courant est égal à l&#8217;élément recherché (la recherche a trouvé),
+soit parce que la liste a été entièrement parcourue (la recherche n&#8217;a pas trouvée).
+La complexité en temps de la recherche séquentielle est O(n).</p>
+</div>
+<div class="paragraph">
+<p>La recherche dichotomique (<em>binary search</em>) s&#8217;applique à une liste triée (par exemple en ordre croissant)
+d&#8217;éléments en unique exemplaire.
+Elle consiste alors à tester la valeur centrale de la liste à la valeur recherchée.
+Si cette dernière est inférieure à la valeur centrale, alors cela signifie qu&#8217;elle se trouve dans la première moitié, sinon elle se trouve dans la seconde.
+On réitère alors le processus dans la moitié en question, jusqu&#8217;à ou bien trouver la valeur recherchée, ou bien avoir un intervalle nul.
+La complexité en temps de la recherche dichotomique est O(log2(n))
+(donc bien plus rapide que la recherche séquentielle).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Si les éléments ne sont pas uniques, alors cela introduit une dose de recherche séquentielle dans l&#8217;algorithme de recherche dichotomique. La recherche est donc moins rapide.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Pour accéder à la valeur centrale, il faut avoir :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>un accès direct aux éléments,</p>
+</li>
+<li>
+<p>un moyen de calculer la position des éléments</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>ce dernier point étant possible si par exemple tous les éléments ont la même taille.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_index"><a class="anchor" href="#_index"></a>2.3. Index</h3>
+<div class="paragraph">
+<p>Soit la liste :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. table données</caption>
+<colgroup>
+<col style="width: 8.3333%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 41.6667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indice</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prénom</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Duval</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zacharie</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gerault</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Thomas</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Teruel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Benjamin</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gouerec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ann-Gaelle</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rabarijaona</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vahia</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lebreton</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flavien</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dussot</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sarah</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bouhi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ibrahim</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Douarec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chloe</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lesage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solene</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Diallo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alpha Issagha</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tasli</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ilyas</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>On veut pouvoir effectuer des recherches rapides sur les noms et prénoms.
+Mais la liste n&#8217;est pas triée.
+Et même si elle l&#8217;était, elle le serait soit dans l&#8217;ordre des noms, soit dans l&#8217;ordre des prénoms,
+mais pas les 2.
+Pour effectuer des recherches dichotomiques sur les noms ou les prénoms, on crée donc 2 index :</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. index nom</caption>
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 30%;">
+<col style="width: 40%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indice dans table</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Diallo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Douarec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dussot</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Duval</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gerault</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gouerec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lebreton</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lesage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rabarijaona</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tasli</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Teruel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>et</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. index prénom</caption>
+<colgroup>
+<col style="width: 30%;">
+<col style="width: 30%;">
+<col style="width: 40%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prénom</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indice dans table</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alpha Issagha</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ann-Gaelle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Benjamin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chloe</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flavien</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ibrahim</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ilyas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sarah</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solene</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Thomas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vahia</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zacharie</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Dans chacun des index, on s&#8217;arrange pour toutes les paires aient la même taille,
+afin de pouvoir calculer la position d&#8217;un élément donné.
+Pour la recherche d&#8217;un individu à partir de son nom, on cherche dichotomiquement dans l&#8217;index nom,
+puis on remonte via l&#8217;indice dans la table des données.
+Et même chose pour un prénom.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_id"><a class="anchor" href="#_id"></a>2.4. id</h3>
+<div class="paragraph">
+<p>En python, chaque donnée possède une identité
+(un entier, consultable avec <code>id()</code>, indépendant de la valeur de la donnée.
+2 variables <code>a</code> et <code>b</code> référençant 2 données ayant le même id sont en réalité 2 références vers la même donnée.
+Dans ce cas <code>a is b</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<code>a is b</code> signifie <code>id(a)==id(b)</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Un <code>id</code> n&#8217;a de consistance que pendant la session d&#8217;exécution courante :
+un objet ne conserve pas son <code>id</code> d&#8217;une exécution à l&#8217;autre.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hash"><a class="anchor" href="#_hash"></a>2.5. Hash</h3>
+<div class="paragraph">
+<p>Le hash d&#8217;une donnée est une empreinte (<em>digest</em>) de cette données, un résumé (typiquement un entier).
+Il est improbable que 2 données distinctes produisent le même hash (improbable mais pas impossible,
+situation appelée <em>collision</em>).</p>
+</div>
+<div class="paragraph">
+<p>Une fonction de hashage est l&#8217;agorithme qui calcule le hash sur un ensemble de données.
+Un bon algorithme doit essayer de distribuer uniformément les valeurs qu&#8217;il distribue,
+de façon à minimiser les collisions.
+<code>MD</code>, <code>SHA</code>, <code>RIPEMD</code>  sont des exemples de fonctions de hashage connues.
+Les commandes Unix <code>md5sum</code>, <code>sha1sum</code>, <code>sha512sum</code> en donnent une implémentation.</p>
+</div>
+<div class="paragraph">
+<p>L&#8217;objectif d&#8217;un hash est, dans certaines situations, de pouvoir représenter la donnée à partir de laquelle il a été calculé, afin par exemple de simplifier ou d&#8217;accélérer les traitements.
+Exemple : soit à détecter si le contenu d&#8217;un fichier change au cours du temps.
+Il suffit de calculer son hash initial, puis de le calculer à nouveau de temps en temps.
+Si le hash change, c&#8217;est que le fichier a été modifié
+(par contre, si le hash est le même, on ne peut rien en déduire).</p>
+</div>
+<div class="paragraph">
+<p>En Python, une donnée possédant un hash s&#8217;appelle un <em>hashable</em>.
+On obtient le hash d&#8217;une donnée via la fonction <code>hash()</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_implémentation_dun_dictionnaire"><a class="anchor" href="#_implémentation_dun_dictionnaire"></a>2.6. Implémentation d&#8217;un dictionnaire</h3>
+<div class="paragraph">
+<p>L&#8217;intérêt d&#8217;un dictionnaire est de pouvoir récupérer un élément à l&#8217;aide de sa clé, directement, sans avoir besoin d&#8217;itérer.</p>
+</div>
+<div class="paragraph">
+<p>Grosso modo, on peut voir un dictionnaire comme une liste de paire <code>(clé,valeur)</code>
+et d&#8217;un index <code>(hash(clé),indice_dans_liste)</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Seuls les données hashables peuvent être clé dans un dictionnaire.
+De même, et pour les mêmes raisons,
+seule une donnée hashable peut être élément d&#8217;un ensemble
+(type <code>set</code> et <code>frozenset</code>).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_objets"><a class="anchor" href="#_objets"></a>3. Objets</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_eq"><a class="anchor" href="#_eq"></a>3.1. <code>__eq__()</code></h3>
+<div class="paragraph">
+<p>La méthode <code>__eq__()</code> donne un sens à l&#8217;expression <code>x==y</code>.
+Si la classe ne surcharge pas cette méthode,
+alors le comportement par défaut est <code>x==y &#8656;&#8658; x is y</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_hash_2"><a class="anchor" href="#_hash_2"></a>3.2. <code>__hash__()</code></h3>
+<div class="paragraph">
+<p>Les instances de classes sont hashables, mais le programmeur peut personnaliser la valeur du hash en surchargeant la méthode <code>__hash__()</code>.
+Pour cela, une contrainte impérative à respecter est :
+<code>x==y  &#8658; hash(x)==hash(y)</code>.
+Exemple de mauvaise mais néanmoins valide méthode <code>__hash__()</code> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">class Point:
+  def __init__(self,x,y):
+    self.x = x
+    self.y = y
+
+  def __hash__(self):
+    return 1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Avec cette méthode <code>__hash__()</code>, toutes les instances de <code>Point</code> vont collisionner.
+Autre exemple, de meilleure qualité :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">class Point:
+  def __init__(self,x,y):
+    self.x = x
+    self.y = y
+
+  def __hash__(self):
+    return hash( (self.x, self.y) )</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_persistance"><a class="anchor" href="#_persistance"></a>4. Persistance</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Une donnée est persistante si son existence dépasse celle de l&#8217;application qui l&#8217;a créée.
+La donnée réside initialement en mémoire vive.
+Lorsque l&#8217;application se termine, elle disparait.
+Pour être persistante, elle doit donc être copiée sur un support non volatile,
+en attendant la prochaine exécution (qui la rechargera en mémoire vive).</p>
+</div>
+<div class="paragraph">
+<p>Recopier la donnée ne se résume pas à recopier le bloc de mémoire correspondant.
+Lorsque la structure de la donnée est complexe,
+lorsque notamment il existe des liens entre différentes composantes de cette données,
+il faut alors trouver une représentation qui reste valide en dehors de son environnement natif.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Par exemple, les relations entre les données utilisent souvent l&#8217;id, mais l&#8217;id perd son sens lorsque l&#8217;exécution se termine.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>La transposition de la donnée en un format valide
+au-delà de son contexte natif s&#8217;appelle <em>sérialisation</em>.</p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p class="center">
+  <span style="font-size: 0.9em;">
+  Jacquelin Charbonnel
+  &nbsp; &mdash; &nbsp; 
+  &copy; Creative Commons BY-NC-ND 2017-2025
+  </span>
+  </p>
+</footer>
+
+<script>
+var myDate = new Date(document.lastModified);
+myNewDate = new Intl.DateTimeFormat(
+            undefined,
+            {year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}
+        )
+        .format(myDate).replace(/\./g, '-');
+document.getElementById("lastmodify").innerHTML = myNewDate ;
+</script>
+
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
