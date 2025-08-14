@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Classe :: Python objet</title>
+    <title>Membres de classe :: Python objet</title>
     <meta name="generator" content="Antora 3.1.12">
     <link rel="stylesheet" href="../../../_/css/site.css">
 <link rel="stylesheet" href="../../../_/css/extra.css">
@@ -38,7 +38,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../poo/poo.html">Concepts de la POO</a>
+    <a class="nav-link" href="../poo/poo.html">Concepts de la Programmation Orientée Objet</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../objet/objet.html">Objet</a>
@@ -47,7 +47,7 @@
     <a class="nav-link" href="../operateurs/operateurs.html">Opérateurs</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="classe.html">Classe</a>
+    <a class="nav-link" href="classe.html">Membres de classe</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../heritage/heritage.html">Héritage</a>
@@ -111,7 +111,7 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Python objet</a></li>
-    <li><a href="classe.html">Classe</a></li>
+    <li><a href="classe.html">Membres de classe</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="file:///home/jaclin/antora_components/python_objet/starts/github/modules/classe/pages/classe.adoc">Edit this Page</a></div>
@@ -119,7 +119,7 @@
 <div class="lastmodify"> modifié le <span id="lastmodify"/> </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Classe</h1>
+<h1 class="page">Membres de classe</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="imageblock right">
@@ -128,7 +128,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Les attributs et les méthodes ont été définis jusqu&#8217;ici au niveau des instances.
+<p>Les membres (c&#8217;est-à-dire les attributs et les méthodes) ont été définis jusqu&#8217;ici au niveau des instances.
 Mais on peut en définir aussi au niveau d&#8217;une classe.</p>
 </div>
 </div>
@@ -143,9 +143,12 @@ un attribut de classe est partagé par toutes les instances de la classe.</p>
 <div class="paragraph">
 <p>Exemple : on voudrait que le classe <code>Fraction</code> ait 2 comportements distincts au choix :
 soit les instances se simplifient automatiquement, soit elles restent inchangés.
-On veut que cette propriété soit propre à la classe, et non pas à chaque instance.
-Ce qui veut dire que si la classe est en mode simplification, alors toutes instances du programme vont se simplifier.
-On peut alors utiliser un attribut de classe (en l&#8217;occurence ici <code>reduction</code>) pour mémoriser le mode de fonctionnement courant :</p>
+On veut décider en début de programme si l&#8217;on veut que les fractions se simplifient ou pas.
+Cette propriété s&#8217;applique alors à l&#8217;ensemble de l&#8217;application, pour chaque instance.
+Ce qui veut dire que si la classe est en mode simplification, alors toutes instances du programme vont se simplifier.</p>
+</div>
+<div class="paragraph">
+<p>Pour cela, on va utiliser un attribut de classe (en l&#8217;occurence ici <code>reduction</code>) pour mémoriser le mode de fonctionnement courant :</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -196,7 +199,7 @@ class Fraction:
   q2 = Fraction(9,45)
   print(q1,q2)                   # 3/5 1/5
 
-  Fraction.switch_reduction()
+  q1.switch_reduction()
 
   q3 = Fraction(21,35)
   q4 = Fraction(9,45)

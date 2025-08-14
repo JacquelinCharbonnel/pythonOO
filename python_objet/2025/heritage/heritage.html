@@ -38,7 +38,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../poo/poo.html">Concepts de la POO</a>
+    <a class="nav-link" href="../poo/poo.html">Concepts de la Programmation Orientée Objet</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../objet/objet.html">Objet</a>
@@ -47,7 +47,7 @@
     <a class="nav-link" href="../operateurs/operateurs.html">Opérateurs</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../classe/classe.html">Classe</a>
+    <a class="nav-link" href="../classe/classe.html">Membres de classe</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="heritage.html">Héritage</a>
@@ -325,6 +325,9 @@ class B(A):
     self.B_is_built = True
 
 if __name__=="__main__":
+  a = A()
+  print(f"{a.A_is_built=}") # -&gt; a.A_is_built=True
+
   b = B()
   print(f"{b.B_is_built=}") # -&gt; b.B_is_built=True
   print(f"{b.A_is_built=}") # -&gt; AttributeError: 'B' object has no attribute 'A_is_built'. Did you mean: 'B_is_built'?</code></pre>
@@ -332,10 +335,26 @@ if __name__=="__main__":
 </div>
 <div class="paragraph">
 <p>alors, on constate que le constructeur de <code>A</code> n&#8217;est plus exécuté.
-En effet, en Python, le constructeur de la super-classe n&#8217;est pas appelé automatiquement.
 La partie de <code>B</code> héritée de <code>A</code> n&#8217;est donc pas initialisée,
-et c&#8217;est un problème.
-Le résoudre passe par un appel explicite :</p>
+et c&#8217;est un problème.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Le constructeur de la super-classe n&#8217;est pas appelé automatiquement dans une sous-classe.
+C&#8217;est un choix de Python, qui n&#8217;est pas universel.
+Par exemple, en C++, le constructeur de la super-classe est automatiquement appelé par le constructeur de la sous-classe.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Pour intialiser la partie de <code>B</code> héritée de <code>A</code>,
+il faut faire un appel explicite au constructeur de <code>A</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -366,6 +385,11 @@ if __name__=="__main__":
 <div class="sect2">
 <h3 id="_super"><a class="anchor" href="#_super"></a>3.2. <code>super()</code></h3>
 <div class="paragraph">
+<p>Mentionner le nom de sa super-classe A dans une classe B n&#8217;est pas judicieux.
+En effet, si, au grè des évolutions, une classe <code>C</code> vient à s&#8217;intercaler,
+dans l&#8217;arbre d&#8217;héritage, entre <code>A</code> et <code>B</code>, alors il faudra reprendre le code de <code>B</code>.</p>
+</div>
+<div class="paragraph">
 <p>Pour éviter d&#8217;utiliser le nom de la super-classe en dur,
 mieux vaut utiliser la fonction <code>super()</code> qui la renvoie (dynamiquement) :</p>
 </div>
@@ -393,6 +417,32 @@ if __name__=="__main__":
 <td>appel explicite au constructeur de la super-classe</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Ce qui permet d&#8217;intercaler une classe <code>C</code> sans douleur :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">class A:
+  def __init__(self):
+    self.A_is_built = True
+
+class C(A):
+  def __init__(self):
+    super().__init__()
+    self.C_is_built = True
+
+class B(C):
+  def __init__(self):
+    super().__init__()
+    self.B_is_built = True
+
+if __name__=="__main__":
+  b = B()
+  print(f"{b.B_is_built=}") # -&gt; b.B_is_built=True
+  print(f"{b.C_is_built=}") # -&gt; b.C_is_built=True
+  print(f"{b.A_is_built=}") # -&gt; b.A_is_built=True</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -512,7 +562,8 @@ if __name__=="__main__":
 <div class="sect2">
 <h3 id="_récapitulatif"><a class="anchor" href="#_récapitulatif"></a>3.4. Récapitulatif</h3>
 <div class="paragraph">
-<p>Créer une instance de <code>B</code>, c&#8217;est donc créer d&#8217;abord une instance de <code>A</code>,
+<p>Soit <code>B</code> une classe qui hérite de <code>A</code>.
+Créer une instance de <code>B</code>, c&#8217;est donc créer d&#8217;abord une instance de <code>A</code>,
 puis y ajouter ce qu&#8217;il manque pour parvenir à un objet de type <code>B</code>.
 Si la construction de l&#8217;instance de <code>A</code> nécessite des arguments,
 cela doit être pris en charge par l&#8217;instance de <code>B</code>, lors de sa création :</p>
@@ -787,6 +838,9 @@ b.k()         # inside A.k
 </div>
 <div class="sect2">
 <h3 id="_limplémentation"><a class="anchor" href="#_limplémentation"></a>7.2. L&#8217;implémentation</h3>
+<div class="paragraph">
+<p>Voici un exemple de ce qu&#8217;il ne faut pas faire :</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">import math
@@ -820,10 +874,15 @@ if __name__=="__main__":
 </div>
 </div>
 <div class="paragraph">
-<p>Bien que cet exemple calcule correctement les surfaces des cercles et carrés, il montre que son auteur ne maitrise pas la POO.
-En effet, la classe <code>Shape</code> référence explicitement ses sous-classes <code>Circle</code> et <code>Square</code>.
-Conséquence : pour chaque nouvelle forme à venir (triangle, pentagon, etc.), il faudra modifier le constructeur de <code>Shape</code>.
-La POO permet de faire beaucoup mieux :</p>
+<p>Dans ce programme, qui calcule correctement les surfaces des cercles et carrés, il y a un problème :
+la classe <code>Shape</code> référence explicitement ses sous-classes <code>Circle</code> et <code>Square</code>.
+Or le concepteur de <code>Shape</code> n&#8217;est pas censé connaitre toutes les classes qui seront dérivées de sa classe.
+D&#8217;ailleurs, elles n&#8217;existent probablement pas au moment où il conçoit <code>Shape</code>.
+Pour chaque nouvelle forme à venir, il faudra modifier le constructeur de <code>Shape</code>.
+Par exemple, le concepteur d&#8217;une classe <code>Triangle</code>, qui n&#8217;est qu&#8217;un utilisateur de la classe <code>Shape</code>, va devoir la modifier : ça ne va pas.</p>
+</div>
+<div class="paragraph">
+<p>La POO permet de faire beaucoup mieux :</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -846,7 +905,7 @@ class Square(Shape):
 </div>
 </div>
 <div class="paragraph">
-<p>Ici, plus de dépendance <em>super classe</em> &#8594; <em>sous classe</em>, c&#8217;est nettement meilleur.
+<p>Ici, plus de dépendance <em>super classe</em> &#8594; <em>sous classe</em>, c&#8217;est nettement mieux.
 Mais le programmeur qui va utiliser <code>Shape</code> pour dériver ses propres  classes doit comprendre que celles-ci doivent implémenter une méthode <code>area(self)</code>, sinon :</p>
 </div>
 <div class="listingblock">
@@ -904,7 +963,7 @@ if __name__=="__main__":
 </div>
 </div>
 <div class="paragraph">
-<p>Une autre façon de faire consiste à utiliser la classe <code>ABC</code> du module <code>abc</code>,
+<p>Une autre façon de faire consiste à utiliser la classe <code>ABC</code> (pour <em>Abstract Base Classes</em>) du module <code>abc</code>,
 qui est justement faite pour ça.</p>
 </div>
 </div>
@@ -933,15 +992,14 @@ une méthode de B qui n&#8217;existait pas au moment où A a été créée.
 C&#8217;est l&#8217;aspect magique du polymorphisme.</p>
 </div>
 <div class="paragraph">
-<p>Pour jouer avec ce concept, le développeur d1 doit imaginer tout le potentiel de sa classe A,
+<p>Pour exploiter ce concept, le développeur d1 doit imaginer tout le potentiel de sa classe A,
 comment elle pourrait être utilisée dans le futur.
 Il doit faire en sorte de permettre au développeur qui réutilisera sa classe A pour créer une classe dérivée B,
 de pouvoir insérer son propre code là où c&#8217;est judicieux.
 Concrètement, cela veut dire
 créer dans A des méthodes destinées à être redéfinies dans les futures sous-classes.
 Et même parfois à créer des méthodes qui ne font rien dans A (des <em>hooks</em>),
-et dont le seul but est d&#8217;être redéfinies dans B.
-En Python, ces méthodes particulières ne se distinguent pas des autres méthodes.</p>
+et dont le seul but est d&#8217;être redéfinies dans B.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -951,16 +1009,19 @@ En Python, ces méthodes particulières ne se distinguent pas des autres méthod
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Avec un langage compilé, le polymorphisme est encore plus impressionnant.
-En effet, une méthode d&#8217;une classe A compilée dans le passé peut appeler une méthode d&#8217;une sous-classe créée bien après A, sans nécessité d&#8217;être recompilée.</p>
+<p>En Python, ces méthodes particulières ne se distinguent pas des autres méthodes.</p>
 </div>
 <div class="paragraph">
 <p>En C++, les méthodes destinées à être redéfinies dans les sous-classes sont appelées <em>méthodes virtuelles</em>,
-et parmi elles, celles qui ne font rien sont nommées <em>méthodes virtuelles pures</em>.</p>
+et parmi elles, celles qui ne font rien sont des <em>méthodes virtuelles pures</em>.</p>
 </div>
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Avec un langage compilé, le polymorphisme est encore plus étonnant.
+En effet, une méthode d&#8217;une classe A compilée dans le passé peut appeler une méthode d&#8217;une sous-classe créée bien après A, sans nécessité d&#8217;être recompilée.</p>
 </div>
 </div>
 </div>

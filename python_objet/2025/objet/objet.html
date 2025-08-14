@@ -38,7 +38,7 @@
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../poo/poo.html">Concepts de la POO</a>
+    <a class="nav-link" href="../poo/poo.html">Concepts de la Programmation Orientée Objet</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="objet.html">Objet</a>
@@ -47,7 +47,7 @@
     <a class="nav-link" href="../operateurs/operateurs.html">Opérateurs</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../classe/classe.html">Classe</a>
+    <a class="nav-link" href="../classe/classe.html">Membres de classe</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../heritage/heritage.html">Héritage</a>
@@ -513,25 +513,6 @@ print(z.__x,z.__y)   # ⛔ ⛔</code></pre>
 AttributeError: 'Complex' object has no attribute '__y'</pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Mais cela reste contournable en écrivant :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">print(z._Complex__x,z._Complex__y)</code></pre>
-</div>
-</div>
-</td>
-</tr>
-</table>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_récapitulatif"><a class="anchor" href="#_récapitulatif"></a>3.5. Récapitulatif</h3>
@@ -547,7 +528,7 @@ La convention est de le nommer <code>self</code>.
 </div>
 <div class="paragraph">
 <p>Hors de la classe, dans le programme principal,
-écrire <code>z.module()</code> (où <code>z</code> est une instance de a classe <code>Complex</code>) n&#8217;est qu&#8217;une manière élégante d&#8217;écrire <code>Complex.module(z)</code>.</p>
+écrire <code>z.module()</code> (où <code>z</code> est une instance de la classe <code>Complex</code>) n&#8217;est qu&#8217;une manière élégante d&#8217;écrire <code>Complex.module(z)</code>.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -566,7 +547,7 @@ La convention est de le nommer <code>self</code>.
 et qui par conséquent, dispose d&#8217;un accès total aux entrailles des objets de type <code>C</code>,</p>
 </li>
 <li>
-<p>l&#8217;utilisateur de la classe, qui crée des instances de <code>C</code> sans connaitre les détails de l&#8217;implémentation : il importe le fichier <code>C.py</code> sans connaitre son contenu (pas de nécessité d&#8217;y jeter un oeil, et encore moins de le modifier).</p>
+<p>l&#8217;utilisateur de la classe, qui crée des instances de <code>C</code> sans connaitre les détails de l&#8217;implémentation : il importe le fichier <code>C.py</code> sans connaitre son contenu (pas de nécessité pour lui d&#8217;y jeter un oeil, et encore moins de le modifier).</p>
 </li>
 </ul>
 </div>
@@ -610,9 +591,9 @@ Mais le programmeur peut les redéfinir (les <em>surcharger</em>) pour personnal
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Cette forme de nom alambiquée (un nom encadrée par 2 doubles underscores) est courante en Python.
+<p>Cette forme de nom alambiquée (un nom encadré par 2 doubles underscores) est courante en Python.
 Elle a pour but de minimiser le risque de collision avec ce que le programmeur peut choisir comme noms pour ses créations
-(en général, le déveoppeur ne choisit pas de nom de cette forme).
+(en général, le développeur ne choisit pas de nom de cette forme).
 On les surnomme les  <em>dunders</em> (<strong>D</strong>ouble <strong>UNDER</strong>scores).</p>
 </div>
 </td>
@@ -872,7 +853,7 @@ comme essaie de l&#8217;expliquer la doc de Python.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<div class="title">extrait de <a href="https://docs.python.org/fr/3/reference/datamodel.html#specialnames">la doc Python</a></div>
+<div class="title">extrait de <a href="https://docs.python.org/fr/3/reference/datamodel.html#object.&#95;&#95;repr&#95;&#95;">la doc Python</a></div>
 <div class="paragraph">
 <p><code>__repr__()</code>
 doit renvoyer la représentation « officielle » en chaîne de caractères d&#8217;un objet.
@@ -895,7 +876,7 @@ alors <code>__repr__()</code> est aussi utilisée quand une représentation « i
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<div class="title">extrait de <a href="https://docs.python.org/fr/3/reference/datamodel.html#specialnames">la doc Python</a></div>
+<div class="title">extrait de <a href="https://docs.python.org/fr/3/reference/datamodel.html#object.&#95;&#95;str&#95;&#95;">la doc Python</a></div>
 <div class="paragraph">
 <p><code>__str__()</code>
 doit renvoyer une chaîne de caractères « informelle » ou joliment mise en forme de représentation de l&#8217;objet. La valeur renvoyée doit être un objet string.</p>
