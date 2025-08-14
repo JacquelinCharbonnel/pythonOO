@@ -43,3 +43,29 @@ i.fa.icon-caution::before {
     background: no-repeat url("../img/caution.svg");
 }
 
+h3.discrete, h4.discrete {
+    font-weight: 450;
+    /* margin-right: 50%; */
+    /* border: solid #e1e1e1; */
+    /* border-width: 0 0 1px 0; */
+    /* font-variant-caps: small-caps; */
+    text-decoration: underline dotted ;
+}
+
+.discrete::before {
+    /* content: "" ; */
+}
+
+.discrete::after {
+    /* content: " ↓" ; */
+}
+
+#preamble .abstract blockquote {
+    /* border-left-style: none;  */
+}
+
+#preamble .abstract {
+    border-left-style: none; 
+    padding-left: 0em ;
+}
+
