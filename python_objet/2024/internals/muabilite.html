@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Muabilité :: Python objet</title>
+    <meta name="generator" content="Antora 3.1.12">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+<!-- reference des feuilles de styles supplémentaires -->
+<link rel="stylesheet" href="../../../_/css/layout.css">
+<link rel="stylesheet" href="../../../_/css/content.css">
+
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="../../..">Python objet</a>
+  <!-- suppression du burger du bandeau
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+-->      
+    </div>
+<!-- suppression des boutons du bandeau
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+      </div>
+    </div>
+-->
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="python_objet" data-version="2024">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Python objet</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../poo/poo.html">Concepts de la POO</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../objet/objet.html">Objet</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../operateurs/operateurs.html">Opérateurs</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../classe/classe.html">Membres de classe</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../heritage/heritage.html">Héritage</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../exception/exception.html">Exceptions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Applications</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_iter/iter.html">Itérable</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_files/files.html">Lecture/écriture de données</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_contextman/context.html">Context manager</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_serialisation/serialisation.html">Sérialisation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../app_callable/callable.html">Callables</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Python objet</span>
+    <span class="version">2024</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Python objet</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="../index.html">2024</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Python objet</a></li>
+    <li><a href="muabilite.html">Muabilité</a></li>
+  </ul>
+</nav>
+<!-- supression de "edit this page"
+  <div class="edit-this-page"><a href="file:///home/jaclin/antora_components/python_objet/./modules/internals/pages/muabilite.adoc">Edit this Page</a></div>
+-->
+</div>
+  <!-- ajout de la date de modification -->
+  <div class="lastmodify"> modifié le <span id="lastmodify"/> </div>
+  <!-- fin ajout -->
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Muabilité</h1>
+<div class="sect1">
+<h2 id="_lénigme"><a class="anchor" href="#_lénigme"></a>1. L&#8217;énigme</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_point_de_départ"><a class="anchor" href="#_point_de_départ"></a>1.1. Point de départ</h3>
+<div class="paragraph">
+<p>Le but est de comprendre le phénomène constaté :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from random import randrange
+
+class Carte():
+  valeurs = list(range(7,11)) + ['Valet','Dame','Roi','As']
+  couleurs = ['Coeur','Carreau','Pique','Trèfle']
+
+  def __init__(self,v=None,c=None):
+    if not v:
+      v = Carte.valeurs[randrange(0,len(Carte.valeurs))]
+    if not c:
+      c = Carte.couleurs[randrange(0,len(Carte.couleurs))]
+
+    if not v in Carte.valeurs:
+      raise ValueError(f"{v}: valeur incorrecte")
+    if not c in Carte.couleurs:
+      raise ValueError(f"{c}: couleur incorrecte")
+    self.couleur = c
+    self.valeur = v
+
+  def __str__(self):
+    return f"{self.valeur} de {self.couleur}"
+
+  def __repr__(self):
+    return f"{self.valeur} de {self.couleur}"
+
+class Cartes():
+  def __init__(self,c=None):
+    if c:
+      self.cartes = c.cartes
+    else:
+      self.cartes = []
+
+  def __str__(self):
+    return ", ".join([str(c) for c in self.cartes])
+
+  def __repr__(self):
+    return ", ".join([str(c) for c in self.cartes])
+
+  def pioche(self):
+    try:
+      k = randrange(0,len(self.cartes))
+    except ValueError:
+      raise ValueError(f"pioche vide !")
+
+    carte = self.cartes[k]
+    self.cartes.remove(carte)
+    return carte
+
+  def ajoute(self,c):
+    self.cartes += [c]
+
+if __name__=="__main__":
+  des_cartes = Cartes()
+
+  for i in range(4):
+    des_cartes.ajoute(Carte())
+
+  les_memes = Cartes(des_cartes)
+
+  print(f"{des_cartes=}\n {les_memes=}\n")
+  des_cartes.pioche()
+  print(f"{des_cartes=}\n {les_memes=}")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>donne :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>les_cartes=Valet de Carreau, 9 de Pique, 7 de Coeur, 8 de Trèfle
+ les_memes=Valet de Carreau, 9 de Pique, 7 de Coeur, 8 de Trèfle
+
+des_cartes=9 de Pique, 7 de Coeur, 8 de Trèfle
+ les_memes=9 de Pique, 7 de Coeur, 8 de Trèfle</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pourquoi la modification de <code>des_cartes</code> influe sur <code>les_mêmes</code> ?</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reformulation"><a class="anchor" href="#_reformulation"></a>1.2. Reformulation</h3>
+<div class="paragraph">
+<p>Un exemple simple permet de mettre en évidence le phénomène :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = [1,2]
+b = a
+print(a,b)    # [1, 2] [1, 2]
+a += [3]
+print(a,b)    # [1, 2, 3] [1, 2, 3]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La modification de <code>a</code> impacte là aussi <code>b</code>.
+Pourquoi ?</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_explication"><a class="anchor" href="#_explication"></a>2. Explication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On trouve l&#8217;explication en traçant ce qu&#8217;il se passe :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = [1,2]
+b = a
+print(a is b)       # True
+print(id(a),id(b))  # 140245663171968 140245663171968</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Donc <code>a</code> et <code>b</code> référencent la même donnée.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/list1.png" alt="list1">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a += [3]            <i class="conum" data-value="1"></i><b>(1)</b>
+print(a is b)       # True
+print(id(a),id(b))  # 140245663171968 140245663171968</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>cette instruction modifie la liste <code>[1,2]</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>a</code> et <code>b</code> référencent toujours la même donnée,
+qui vient d&#8217;être modifiée.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/list2.png" alt="list2">
+</div>
+</div>
+<div class="paragraph">
+<p>On remarque au passage qu&#8217;une liste peut donc changer de valeur,
+c&#8217;est pourquoi dans la terminologie pythonique, le type <code>list</code> est dit muable (<em>mutable</em>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_généralisation"><a class="anchor" href="#_généralisation"></a>3. Généralisation ?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tous les type de données se comportent-ils de cette façon ?
+Comment réagit par exemple le type string ?</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = "uv"
+b = a
+print(a,b)    # uv uv
+a += "w"
+print(a,b)    # uvw uv</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On constate que le comportement est différent,
+la modification de <code>a</code> n&#8217;a ici pas d&#8217;impact sur <code>b</code>.
+Explication :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = "uv"
+b = a
+print(a is b)       # True
+print(id(a),id(b))  # 140245667117360 140245667117360</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A ce stade, comme précédemment, <code>a</code> et <code>b</code> référencent la même donnée.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/str1.png" alt="str1">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a += "w"            <i class="conum" data-value="1"></i><b>(1)</b>
+print(a is b)       # False
+print(id(a),id(b))  # 140245667117392 140245667117360</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>cette instruction ne modifie pas la donnée <code>uv</code>,
+mais en crée une nouvelle <code>uvw</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Après la modification de <code>a</code>, <code>a</code> et <code>b</code> ne référencent plus la même donnée.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/str2.png" alt="str2">
+</div>
+</div>
+<div class="paragraph">
+<p>L&#8217;explication tient au fait qu&#8217;en Python, une chaîne de caractères n&#8217;est pas modifiable.
+Dans la terminologie pythonique, le type <code>str</code> est dit immuable (<em>immutable</em>).
+Ce qui semble être une modification est en réalité une création.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Il existe 2 catégories de type en Python, les types muables et les immuables.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_récapitulatif"><a class="anchor" href="#_récapitulatif"></a>4. Récapitulatif</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Les objets dont la valeur peut changer sont muables,
+ceux dont la valeur est définitivement fixée à leur création sont immuables.
+Par exemple :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">t = (1,2,3)
+print(t, id(t))  # (1,2,3) 139727011356608
+t += (4,5)
+print(t,id(t))   # (1,2,3,4,5) 139727011374448</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On constate ci-dessus que la concaténation d&#8217;un tuple à <code>t</code>
+crée une nouvelle donnée, puisque l&#8217;id de <code>t</code> change.
+Donc le type tuple est immuable.
+Mais le tuple peut avoir un (ou plusieurs) élement lui-même muable,
+par exemple un élément de type list :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">t = (1,2,[3,4])
+print(t, id(t))      # (1,2,[3,4]) 139727011443776
+print(t[2],id(t[2])  # [3,4] 139727011443712</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/tuple1.png" alt="tuple1">
+</div>
+</div>
+<div class="paragraph">
+<p>et dans ce cas, l&#8217;élément muable peut changer de valeur :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">l = t[2]
+l += [5]
+print(t,id(t))   # (1,2,[3,4,5]) 139727011443776
+print(t[2],id(t[2])  # [3,4,5] 139727011443712</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/tuple2.png" alt="tuple2">
+</div>
+</div>
+<div class="paragraph">
+<p>Donc au premier niveau, les éléments du tuple sont figés,
+aux autres niveaux, les données peuvent changer.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quel_impact"><a class="anchor" href="#_quel_impact"></a>5. Quel impact ?</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_références_multiples"><a class="anchor" href="#_références_multiples"></a>5.1. Références multiples</h3>
+<div class="paragraph">
+<p>Méfiance lorsque 2 variables pointent vers la même donnée :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = "uv"
+b = a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Les strings étant immuables, <code>a</code> et <code>b</code> auront ici leur propre ligne de vie.
+Ici <code>a is b</code>, mais après une modification de <code>a</code> ou de <code>b</code>, <code>a is b</code> sera <code>False.</code>
+Par contre, les listes étant muables :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">a = [1,2]
+b = a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>alors <code>a</code> et <code>b</code> partageront toujours la même ligne de vie :
+<code>a is b</code>, et le restera après toute modification de <code>a</code> ou <code>b</code>.</p>
+</div>
+<div class="paragraph">
+<div class="title"><code>copy()</code></div>
+<p>La fonction <code>copy</code> du module <code>copy</code> permet de défaire cette liaison :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from copy import copy
+
+a = [1,2]
+print(a,b,a is b)       # [1, 2] [1, 2] True
+b = copy(a)
+print(a,b,a is b)       # [1, 2] [1, 2] False
+b += [3]
+print(a,b)              # [1, 2] [1, 2, 3]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_arguments_de_fonction"><a class="anchor" href="#_arguments_de_fonction"></a>5.2. Arguments de fonction</h3>
+<div class="paragraph">
+<p>Attention aux arguments de fonction, au retour de l&#8217;appel :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def f(x,y):
+  x += y
+  print(f"{x=}") ;
+
+a = "uv"
+f(a,"w")             # x='uvw'
+print(f"{a=}")       # a='uv'
+
+b = [1,2]
+f(b,[3])             # x=[1, 2, 3]
+print(f"{b=}")       # b=[1, 2, 3]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On constate ici que l&#8217;argument <code>a</code> de type <code>str</code> est intact après exécution de <code>f()</code>,
+alors que l&#8217;argument <code>b</code> de type <code>list</code> a été modifié.
+Pour être sûr qu&#8217;une fonction ne va pas modifier un argument muable,
+mieux vaut envoyer une copie :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">def f(x,y):
+  x += y
+
+a = [1,2]
+f(copy(a),[3])
+print(a)       # [1,2]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p class="center">
+  <span style="font-size: 0.9em;">
+    <a href="https://jacquelincharbonnel.github.io/">Jacquelin Charbonnel</a>
+    <!-- &nbsp; &mdash; &nbsp; -->
+    &nbsp; &nbsp;
+    &copy;Creative Commons BY-NC-SA 4.0
+  </span>
+  </p>
+</footer>
+
+<script>
+var myDate = new Date(document.lastModified);
+myNewDate = new Intl.DateTimeFormat(
+            undefined,
+            {year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit"}
+        )
+        .format(myDate).replace(/\./g, '-');
+document.getElementById("lastmodify").innerHTML = myNewDate ;
+</script>
+
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
